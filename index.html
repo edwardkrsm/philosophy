@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triết học Mác-Lênin — Chương 1 & 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0e0c;
+  --bg2: #1a1916;
+  --bg3: #242220;
+  --bg4: #2e2b28;
+  --card: #1e1c19;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --gold: #c9a84c;
+  --gold2: #e8c97a;
+  --gold3: #f5e2b0;
+  --red: #c94a4a;
+  --blue: #4a7fc9;
+  --blue2: #6fa3e8;
+  --teal: #3a9b7c;
+  --teal2: #5dbfa0;
+  --amber: #d4840a;
+  --amber2: #f0a830;
+  --text: #e8e4dc;
+  --text2: #a09890;
+  --text3: #6a6058;
+  --green: #4a9b5a;
+  --green2: #6dbf80;
+  --purple: #7a5ac9;
+  --purple2: #9d82e8;
+  --coral: #c9614a;
+  --coral2: #e8856a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(15,14,12,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; gap: 0;
+  height: 56px;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; color: var(--gold2);
+  margin-right: 2rem; white-space: nowrap;
+}
+.nav-tabs { display: flex; gap: 0; flex: 1; overflow-x: auto; }
+.nav-tab {
+  padding: 0 1.1rem; height: 56px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.02em;
+  color: var(--text2); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s; white-space: nowrap; border-top: none;
+  background: none; border-left: none; border-right: none;
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--gold2); border-bottom-color: var(--gold); }
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+
+/* SECTIONS */
+.section { display: none; padding-top: 56px; min-height: 100vh; }
+.section.active { display: block; }
+
+/* HERO */
+.hero {
+  padding: 4rem 2rem 2rem;
+  max-width: 900px; margin: 0 auto;
+  text-align: center;
+}
+.hero-label {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1rem;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.2; color: var(--gold3);
+  margin-bottom: 1rem;
+}
+.hero p { color: var(--text2); font-size: 1rem; line-height: 1.7; max-width: 600px; margin: 0 auto 2rem; }
+
+/* MINDMAP */
+#mindmap-container {
+  width: 100%; overflow: auto;
+  padding: 2rem;
+  cursor: grab;
+}
+#mindmap-container:active { cursor: grabbing; }
+#mindmap-svg { display: block; margin: 0 auto; }
+.mm-node { cursor: pointer; }
+.mm-node rect { transition: all 0.2s; }
+.mm-node:hover rect { filter: brightness(1.15); }
+.mm-tooltip {
+  position: fixed;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  max-width: 260px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 200;
+  line-height: 1.5;
+}
+
+/* DETAIL PANEL */
+.detail-panel {
+  display: none;
+  position: fixed; right: 0; top: 56px; bottom: 0;
+  width: 360px;
+  background: var(--bg2);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  z-index: 90;
+  padding: 1.5rem;
+}
+.detail-panel.open { display: block; }
+.detail-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: none; border: 1px solid var(--border2);
+  color: var(--text2); width: 28px; height: 28px;
+  border-radius: 50%; cursor: pointer; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.detail-close:hover { color: var(--text); border-color: var(--gold); }
+.detail-tag {
+  font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.5rem;
+}
+.detail-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; color: var(--gold3); margin-bottom: 1rem;
+}
+.detail-body { font-size: 0.88rem; line-height: 1.75; color: var(--text2); }
+.detail-body strong { color: var(--text); font-weight: 600; }
+.detail-body .highlight {
+  background: rgba(201,168,76,0.1);
+  border-left: 2px solid var(--gold);
+  padding: 0.6rem 0.8rem;
+  margin: 0.8rem 0;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+}
+
+/* SIMULATOR SECTION */
+.sim-wrap { max-width: 860px; margin: 0 auto; padding: 2rem; }
+.sim-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; color: var(--gold3); margin-bottom: 0.4rem;
+}
+.sim-sub { color: var(--text2); font-size: 0.9rem; margin-bottom: 2rem; }
+
+.sim-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+.sim-card-title {
+  font-weight: 700; font-size: 1rem; color: var(--gold2);
+  margin-bottom: 0.3rem;
+}
+.sim-card-desc { font-size: 0.83rem; color: var(--text3); margin-bottom: 1.5rem; }
+
+/* WATER SIMULATOR */
+.water-vis {
+  width: 100%; height: 200px;
+  background: var(--bg3);
+  border-radius: 12px;
+  position: relative; overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+}
+.water-tank {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 160px; height: 170px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+.water-fill {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, #1a5fa8, #3080cc);
+  transition: all 0.4s;
+  border-radius: 0 0 10px 10px;
+  height: 70%;
+}
+.water-surface {
+  position: absolute;
+  left: 0; right: 0;
+  height: 4px;
+  border-radius: 2px;
+  transition: all 0.4s;
+}
+.steam-particle {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(200,230,255,0.6);
+  animation: rise 2s ease-out infinite;
+  opacity: 0;
+}
+@keyframes rise {
+  0% { transform: translateY(0) scale(1); opacity: 0.7; }
+  100% { transform: translateY(-60px) scale(2.5); opacity: 0; }
+}
+.state-badge {
+  position: absolute; top: 12px; right: 12px;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 0.78rem; font-weight: 600;
+  transition: all 0.4s;
+}
+.state-do { background: rgba(74,127,201,0.2); color: var(--blue2); border: 1px solid rgba(74,127,201,0.4); }
+.state-hoi { background: rgba(200,200,255,0.15); color: #bccff8; border: 1px solid rgba(150,170,240,0.4); }
+.state-da { background: rgba(150,200,255,0.15); color: #9ec5fa; border: 1px solid rgba(100,150,230,0.35); }
+.temp-display {
+  position: absolute; top: 12px; left: 12px;
+  font-size: 1.6rem; font-weight: 700; color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.phase-label {
+  font-size: 0.75rem; color: var(--text3);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.diem-nut-marker {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  font-size: 0.75rem; font-weight: 700;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 2px 8px;
+  border-radius: 4px 4px 0 0;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.water-bar-wrap { position: relative; margin-bottom: 0.5rem; }
+.water-bar-labels {
+  display: flex; justify-content: space-between;
+  font-size: 0.75rem; color: var(--text3); margin-bottom: 0.4rem;
+}
+.water-bar-ticks {
+  position: relative; height: 8px;
+  display: flex; align-items: center;
+}
+.tick { position: absolute; width: 1px; height: 12px; background: var(--border2); bottom: 0; }
+.tick.major { height: 18px; background: var(--border); }
+input[type=range].water-slider {
+  -webkit-appearance: none;
+  width: 100%; height: 6px;
+  background: var(--bg3); border-radius: 3px;
+  outline: none; cursor: pointer;
+  border: 1px solid var(--border);
+}
+input[type=range].water-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--gold); cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.2);
+  transition: box-shadow 0.2s;
+}
+input[type=range].water-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 5px rgba(201,168,76,0.3);
+}
+.phase-info {
+  background: var(--bg3); border-radius: 10px; padding: 1rem 1.2rem;
+  border: 1px solid var(--border);
+  font-size: 0.85rem; line-height: 1.6;
+  transition: all 0.4s;
+}
+
+/* SPIRAL ANIMATION */
+.spiral-container { position: relative; width: 100%; }
+.spiral-stage {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 0; cursor: pointer;
+  opacity: 0.5; transition: opacity 0.3s;
+}
+.spiral-stage.active { opacity: 1; }
+.spiral-dot {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+  border: 2px solid var(--border2);
+  transition: all 0.3s;
+}
+.spiral-stage.active .spiral-dot {
+  border-color: var(--gold); background: rgba(201,168,76,0.15);
+}
+.spiral-text h4 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+.spiral-text p { font-size: 0.82rem; color: var(--text2); }
+.spiral-connector {
+  width: 2px; height: 24px; background: var(--border);
+  margin-left: 19px; position: relative;
+}
+.spiral-connector::after {
+  content: '';
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: 0; border: 4px solid transparent;
+  border-top: 5px solid var(--border);
+}
+.spiral-svg { width: 100%; margin-bottom: 1rem; }
+.spiral-nav { display: flex; gap: 0.5rem; }
+.spiral-btn {
+  padding: 6px 16px; border-radius: 20px;
+  background: none; border: 1px solid var(--border2);
+  color: var(--text2); font-size: 0.82rem; cursor: pointer;
+  transition: all 0.2s; font-family: inherit;
+}
+.spiral-btn:hover { border-color: var(--gold); color: var(--gold2); }
+.spiral-btn.primary { background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold2); }
+
+/* DRAG AND DROP */
+.drag-arena {
+  min-height: 180px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  align-content: flex-start;
+}
+.drag-card {
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.82rem; color: var(--text);
+  cursor: grab; user-select: none;
+  transition: all 0.2s;
+}
+.drag-card:hover { border-color: var(--gold); color: var(--gold2); transform: translateY(-1px); }
+.drag-card.dragging { opacity: 0.5; cursor: grabbing; }
+.drag-card.correct { border-color: var(--green); background: rgba(74,155,90,0.15); color: var(--green2); animation: pop 0.3s ease; }
+.drag-card.wrong { border-color: var(--red); animation: shake 0.3s ease; }
+@keyframes pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+.drop-zone {
+  flex: 1; min-width: 220px;
+  background: var(--bg3); border: 1.5px dashed var(--border2);
+  border-radius: 12px; padding: 1rem;
+  transition: all 0.2s;
+}
+.drop-zone.over { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+.drop-zone-title {
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+}
+.dv-color { color: var(--teal2); }
+.dt-color { color: var(--coral2); }
+.drop-zone .drag-card { margin-bottom: 0.4rem; }
+.drop-zones-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+.drag-score {
+  font-size: 0.82rem; color: var(--text2);
+  margin-top: 0.75rem;
+}
+.score-num { color: var(--gold2); font-weight: 700; font-size: 1rem; }
+.reset-btn {
+  background: none; border: 1px solid var(--border2);
+  color: var(--text2); padding: 4px 12px; border-radius: 20px;
+  font-size: 0.78rem; cursor: pointer; font-family: inherit;
+  transition: all 0.2s;
+}
+.reset-btn:hover { border-color: var(--gold); color: var(--gold2); }
+
+/* QUIZ */
+.quiz-container { max-width: 760px; margin: 0 auto; }
+.quiz-q {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.quiz-q-num {
+  font-size: 0.72rem; color: var(--text3); letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 0.6rem;
+}
+.quiz-q-text { font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.2rem; }
+.quiz-q-text .trap {
+  background: rgba(212,132,10,0.2); border-radius: 4px;
+  padding: 0 3px; transition: all 0.4s;
+  border-bottom: 1.5px solid transparent;
+}
+.quiz-q-text .trap.revealed { border-bottom-color: var(--amber2); }
+.quiz-btns { display: flex; gap: 0.6rem; }
+.quiz-btn {
+  padding: 8px 20px; border-radius: 8px;
+  font-size: 0.85rem; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+  border: 1px solid var(--border2);
+  background: var(--bg3); color: var(--text);
+  transition: all 0.2s; flex: 1;
+}
+.quiz-btn:hover:not(:disabled) { border-color: var(--gold); color: var(--gold2); }
+.quiz-btn.correct-ans { background: rgba(74,155,90,0.15); border-color: var(--green); color: var(--green2); }
+.quiz-btn.wrong-ans { background: rgba(201,74,74,0.1); border-color: var(--red); color: #e87a7a; }
+.quiz-btn:disabled { cursor: default; }
+.quiz-explain {
+  margin-top: 1rem;
+  background: var(--bg3); border-radius: 8px; padding: 0.9rem 1rem;
+  font-size: 0.83rem; line-height: 1.6; color: var(--text2);
+  border-left: 2px solid var(--gold);
+  display: none;
+}
+.quiz-explain.show { display: block; }
+.quiz-explain .trap-reveal {
+  color: var(--amber2); font-weight: 600;
+}
+.quiz-progress {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.5rem;
+}
+.quiz-score-display {
+  font-size: 0.88rem; color: var(--text2);
+}
+.quiz-score-display span { color: var(--gold2); font-weight: 700; font-size: 1rem; }
+
+/* SCENARIO */
+.scenario-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem; line-height: 1.7; color: var(--text2);
+}
+.scenario-highlight {
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 4px; padding: 0 3px;
+  cursor: pointer; color: var(--text);
+  transition: all 0.2s; position: relative;
+}
+.scenario-highlight.tn { 
+  background: rgba(58,155,124,0.15); border-color: rgba(58,155,124,0.35);
+}
+.scenario-highlight.nn { 
+  background: rgba(201,97,74,0.15); border-color: rgba(201,97,74,0.35);
+}
+.scenario-task {
+  font-size: 0.82rem; color: var(--text3); margin-bottom: 0.75rem;
+}
+.scenario-legend { display: flex; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--text2); }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+.tn-dot { background: rgba(58,155,124,0.5); border: 1px solid var(--teal); }
+.nn-dot { background: rgba(201,97,74,0.5); border: 1px solid var(--coral); }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 600px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .detail-panel { width: 100%; }
+}
+
+/* CONTENT (notes/summary page) */
+.content-wrap { max-width: 780px; margin: 0 auto; padding: 2rem; }
+.content-section { margin-bottom: 2.5rem; }
+.content-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; color: var(--gold3);
+  margin-bottom: 1rem; padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.content-subsection { margin-bottom: 1.5rem; }
+.content-subsection h3 { font-size: 0.95rem; color: var(--gold2); margin-bottom: 0.6rem; font-weight: 600; }
+.content-body { font-size: 0.88rem; line-height: 1.75; color: var(--text2); }
+.content-body strong { color: var(--text); }
+.callout {
+  background: rgba(201,168,76,0.08);
+  border-left: 3px solid var(--gold);
+  padding: 0.8rem 1rem; border-radius: 0 8px 8px 0;
+  font-size: 0.85rem; color: var(--text2); margin: 0.8rem 0;
+  line-height: 1.6;
+}
+.callout.info { border-color: var(--blue); background: rgba(74,127,201,0.08); }
+.callout.tip { border-color: var(--teal); background: rgba(58,155,124,0.08); }
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+.tag {
+  padding: 2px 10px; border-radius: 20px;
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+}
+.tag.dv { background: rgba(58,155,124,0.15); color: var(--teal2); border: 1px solid rgba(58,155,124,0.3); }
+.tag.dt { background: rgba(201,97,74,0.15); color: var(--coral2); border: 1px solid rgba(201,97,74,0.3); }
+.tag.bc { background: rgba(122,90,201,0.15); color: var(--purple2); border: 1px solid rgba(122,90,201,0.3); }
+.tag.sh { background: rgba(212,132,10,0.15); color: var(--amber2); border: 1px solid rgba(212,132,10,0.3); }
+
+/* TABLE */
+.phi-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.8rem 0; }
+.phi-table th { padding: 0.6rem 0.8rem; text-align: left; font-size: 0.8rem; font-weight: 600; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+.phi-table td { padding: 0.65rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text2); vertical-align: top; }
+.phi-table tr:hover td { background: rgba(255,255,255,0.02); color: var(--text); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* FLAME ANIM */
+@keyframes flicker { 0%,100%{opacity:1;transform:scaleX(1)} 50%{opacity:.85;transform:scaleX(0.9)} }
+.flame { animation: flicker 0.5s ease-in-out infinite; transform-origin: bottom center; }
+.flame2 { animation: flicker 0.7s ease-in-out 0.15s infinite; transform-origin: bottom center; }
+
+/* Glow pulse */
+@keyframes glow-pulse { 0%,100%{opacity:0.25} 50%{opacity:0.55} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">⚗ Triết Mác-Lênin</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('map')"><span class="nav-dot"></span>Bản đồ tư duy</button>
+    <button class="nav-tab" onclick="showSection('sim')"><span class="nav-dot"></span>Mô phỏng quy luật</button>
+    <button class="nav-tab" onclick="showSection('drag')"><span class="nav-dot"></span>Phân loại</button>
+    <button class="nav-tab" onclick="showSection('quiz')"><span class="nav-dot"></span>Trắc nghiệm</button>
+    <button class="nav-tab" onclick="showSection('notes')"><span class="nav-dot"></span>Tóm tắt</button>
+  </div>
+</nav>
+
+<!-- ==================== SECTION: MAP ==================== -->
+<div id="section-map" class="section active">
+  <div class="hero">
+    <div class="hero-label">Bản đồ tư duy</div>
+    <h1>Triết học Mác-Lênin</h1>
+    <p>Click vào bất kỳ nút nào để xem nội dung chi tiết. Toàn bộ hệ thống kiến thức Chương 1 & 2.</p>
+  </div>
+  <div id="mindmap-container">
+    <svg id="mindmap-svg" width="900" height="620" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="mm-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
+        </marker>
+      </defs>
+      <!-- Lines from center to main branches -->
+      <line x1="450" y1="300" x2="175" y2="160" stroke="rgba(201,168,76,0.3)" stroke-width="1.5" marker-end="url(#mm-arrow)"/>
+      <line x1="450" y1="300" x2="175" y2="440" stroke="rgba(74,127,201,0.35)" stroke-width="1.5" marker-end="url(#mm-arrow)"/>
+      <line x1="450" y1="300" x2="725" y2="160" stroke="rgba(58,155,124,0.35)" stroke-width="1.5" marker-end="url(#mm-arrow)"/>
+      <line x1="450" y1="300" x2="725" y2="440" stroke="rgba(122,90,201,0.35)" stroke-width="1.5" marker-end="url(#mm-arrow)"/>
+      <!-- Sub-lines Ch1 -->
+      <line x1="175" y1="160" x2="80" y2="100" stroke="rgba(201,168,76,0.18)" stroke-width="1"/>
+      <line x1="175" y1="160" x2="80" y2="160" stroke="rgba(201,168,76,0.18)" stroke-width="1"/>
+      <line x1="175" y1="160" x2="80" y2="220" stroke="rgba(201,168,76,0.18)" stroke-width="1"/>
+      <!-- Sub-lines Ch2-VM -->
+      <line x1="175" y1="440" x2="55" y2="380" stroke="rgba(74,127,201,0.18)" stroke-width="1"/>
+      <line x1="175" y1="440" x2="55" y2="440" stroke="rgba(74,127,201,0.18)" stroke-width="1"/>
+      <line x1="175" y1="440" x2="55" y2="500" stroke="rgba(74,127,201,0.18)" stroke-width="1"/>
+      <!-- Sub-lines PBC -->
+      <line x1="725" y1="160" x2="820" y2="90" stroke="rgba(58,155,124,0.18)" stroke-width="1"/>
+      <line x1="725" y1="160" x2="820" y2="160" stroke="rgba(58,155,124,0.18)" stroke-width="1"/>
+      <line x1="725" y1="160" x2="820" y2="230" stroke="rgba(58,155,124,0.18)" stroke-width="1"/>
+      <!-- Sub-lines Nhận thức -->
+      <line x1="725" y1="440" x2="820" y2="380" stroke="rgba(122,90,201,0.18)" stroke-width="1"/>
+      <line x1="725" y1="440" x2="820" y2="450" stroke="rgba(122,90,201,0.18)" stroke-width="1"/>
+      <line x1="725" y1="440" x2="820" y2="510" stroke="rgba(122,90,201,0.18)" stroke-width="1"/>
+
+      <!-- CENTER NODE -->
+      <g class="mm-node" onclick="showDetail('center')">
+        <ellipse cx="450" cy="300" rx="80" ry="44" fill="rgba(201,168,76,0.18)" stroke="rgba(201,168,76,0.5)" stroke-width="1.5"/>
+        <text x="450" y="295" text-anchor="middle" fill="#e8c97a" font-family="'Playfair Display',serif" font-size="13" font-weight="700">Triết học</text>
+        <text x="450" y="313" text-anchor="middle" fill="#c9a84c" font-family="'Be Vietnam Pro',sans-serif" font-size="11">Mác-Lênin</text>
+      </g>
+
+      <!-- CHƯƠNG 1 -->
+      <g class="mm-node" onclick="showDetail('ch1')">
+        <rect x="100" y="130" width="150" height="60" rx="10" fill="rgba(201,168,76,0.12)" stroke="rgba(201,168,76,0.4)" stroke-width="1.2"/>
+        <text x="175" y="156" text-anchor="middle" fill="#e8c97a" font-family="'Be Vietnam Pro',sans-serif" font-size="11" font-weight="700">Chương 1</text>
+        <text x="175" y="172" text-anchor="middle" fill="#a09080" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Khái luận Triết học</text>
+      </g>
+      <!-- Ch1 subs -->
+      <g class="mm-node" onclick="showDetail('vdcb')">
+        <rect x="10" y="74" width="135" height="36" rx="8" fill="rgba(201,168,76,0.07)" stroke="rgba(201,168,76,0.22)" stroke-width="1"/>
+        <text x="77" y="96" text-anchor="middle" fill="#c9a84c" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Vấn đề cơ bản</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('truongphai')">
+        <rect x="10" y="140" width="135" height="36" rx="8" fill="rgba(201,168,76,0.07)" stroke="rgba(201,168,76,0.22)" stroke-width="1"/>
+        <text x="77" y="162" text-anchor="middle" fill="#c9a84c" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Trường phái TH</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('raдoi')">
+        <rect x="10" y="204" width="135" height="36" rx="8" fill="rgba(201,168,76,0.07)" stroke="rgba(201,168,76,0.22)" stroke-width="1"/>
+        <text x="77" y="226" text-anchor="middle" fill="#c9a84c" font-family="'Be Vietnam Pro',sans-serif" font-size="10">TH Mác ra đời</text>
+      </g>
+
+      <!-- CHƯƠNG 2: VẬT CHẤT & Ý THỨC -->
+      <g class="mm-node" onclick="showDetail('vatchat')">
+        <rect x="100" y="410" width="150" height="60" rx="10" fill="rgba(74,127,201,0.12)" stroke="rgba(74,127,201,0.4)" stroke-width="1.2"/>
+        <text x="175" y="436" text-anchor="middle" fill="#6fa3e8" font-family="'Be Vietnam Pro',sans-serif" font-size="11" font-weight="700">Vật chất & Ý thức</text>
+        <text x="175" y="452" text-anchor="middle" fill="#607898" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Chương 2 — Phần I</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('dinhlenin')">
+        <rect x="-12" y="354" width="140" height="36" rx="8" fill="rgba(74,127,201,0.07)" stroke="rgba(74,127,201,0.22)" stroke-width="1"/>
+        <text x="58" y="376" text-anchor="middle" fill="#4a7fc9" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Định nghĩa Lênin</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('ythuc')">
+        <rect x="-12" y="414" width="140" height="36" rx="8" fill="rgba(74,127,201,0.07)" stroke="rgba(74,127,201,0.22)" stroke-width="1"/>
+        <text x="58" y="436" text-anchor="middle" fill="#4a7fc9" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Nguồn gốc ý thức</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('qhvcyt')">
+        <rect x="-12" y="474" width="140" height="36" rx="8" fill="rgba(74,127,201,0.07)" stroke="rgba(74,127,201,0.22)" stroke-width="1"/>
+        <text x="58" y="496" text-anchor="middle" fill="#4a7fc9" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Quan hệ VC-YT</text>
+      </g>
+
+      <!-- PHÉP BIỆN CHỨNG -->
+      <g class="mm-node" onclick="showDetail('pbc')">
+        <rect x="650" y="130" width="150" height="60" rx="10" fill="rgba(58,155,124,0.12)" stroke="rgba(58,155,124,0.4)" stroke-width="1.2"/>
+        <text x="725" y="156" text-anchor="middle" fill="#5dbfa0" font-family="'Be Vietnam Pro',sans-serif" font-size="11" font-weight="700">Phép biện chứng</text>
+        <text x="725" y="172" text-anchor="middle" fill="#3a7860" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Chương 2 — Phần II</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('nguyenli')">
+        <rect x="750" y="62" width="140" height="36" rx="8" fill="rgba(58,155,124,0.07)" stroke="rgba(58,155,124,0.22)" stroke-width="1"/>
+        <text x="820" y="84" text-anchor="middle" fill="#3a9b7c" font-family="'Be Vietnam Pro',sans-serif" font-size="10">2 Nguyên lý</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('phomtru')">
+        <rect x="750" y="132" width="140" height="36" rx="8" fill="rgba(58,155,124,0.07)" stroke="rgba(58,155,124,0.22)" stroke-width="1"/>
+        <text x="820" y="154" text-anchor="middle" fill="#3a9b7c" font-family="'Be Vietnam Pro',sans-serif" font-size="10">6 Cặp phạm trù</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('quyluat')">
+        <rect x="750" y="204" width="140" height="36" rx="8" fill="rgba(58,155,124,0.07)" stroke="rgba(58,155,124,0.22)" stroke-width="1"/>
+        <text x="820" y="226" text-anchor="middle" fill="#3a9b7c" font-family="'Be Vietnam Pro',sans-serif" font-size="10">3 Quy luật cơ bản</text>
+      </g>
+
+      <!-- LÝ LUẬN NHẬN THỨC -->
+      <g class="mm-node" onclick="showDetail('nhanihuc')">
+        <rect x="650" y="410" width="150" height="60" rx="10" fill="rgba(122,90,201,0.12)" stroke="rgba(122,90,201,0.4)" stroke-width="1.2"/>
+        <text x="725" y="436" text-anchor="middle" fill="#9d82e8" font-family="'Be Vietnam Pro',sans-serif" font-size="11" font-weight="700">Lý luận nhận thức</text>
+        <text x="725" y="452" text-anchor="middle" fill="#5a4a88" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Chương 2 — Phần III</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('thuctien')">
+        <rect x="752" y="354" width="140" height="36" rx="8" fill="rgba(122,90,201,0.07)" stroke="rgba(122,90,201,0.22)" stroke-width="1"/>
+        <text x="822" y="376" text-anchor="middle" fill="#7a5ac9" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Vai trò thực tiễn</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('conduong')">
+        <rect x="752" y="424" width="140" height="36" rx="8" fill="rgba(122,90,201,0.07)" stroke="rgba(122,90,201,0.22)" stroke-width="1"/>
+        <text x="822" y="446" text-anchor="middle" fill="#7a5ac9" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Con đường nhận thức</text>
+      </g>
+      <g class="mm-node" onclick="showDetail('chantly')">
+        <rect x="752" y="492" width="140" height="36" rx="8" fill="rgba(122,90,201,0.07)" stroke="rgba(122,90,201,0.22)" stroke-width="1"/>
+        <text x="822" y="514" text-anchor="middle" fill="#7a5ac9" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Chân lý</text>
+      </g>
+
+      <!-- Legend -->
+      <text x="450" y="580" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Be Vietnam Pro',sans-serif" font-size="11">Click vào nút để xem chi tiết</text>
+    </svg>
+  </div>
+</div>
+
+<!-- Detail Panel -->
+<div id="detail-panel" class="detail-panel">
+  <button class="detail-close" onclick="closeDetail()">✕</button>
+  <div class="detail-tag" id="d-tag"></div>
+  <div class="detail-title" id="d-title"></div>
+  <div class="detail-body" id="d-body"></div>
+</div>
+
+<!-- ==================== SECTION: SIM ==================== -->
+<div id="section-sim" class="section">
+  <div class="sim-wrap">
+    <div class="sim-title">Mô phỏng Quy luật</div>
+    <div class="sim-sub">Tương tác trực tiếp để hiểu cơ chế hoạt động của từng quy luật biện chứng</div>
+
+    <!-- WATER SIMULATOR -->
+    <div class="sim-card">
+      <div class="sim-card-title">⚗ Quy luật Lượng – Chất: Nước và nhiệt độ</div>
+      <div class="sim-card-desc">Kéo thanh trượt nhiệt độ để quan sát sự tích lũy về lượng dẫn đến bước nhảy về chất</div>
+      
+      <div class="water-vis">
+        <div class="water-tank" id="tank">
+          <div class="water-fill" id="water-fill"></div>
+        </div>
+        <div class="temp-display" id="temp-disp">0°C</div>
+        <div class="state-badge state-da" id="state-badge">Nước đá</div>
+        <div class="diem-nut-marker" id="diem-nut">🔔 Điểm nút!</div>
+        <div id="steam-container"></div>
+      </div>
+
+      <div class="water-bar-wrap">
+        <div class="water-bar-labels">
+          <span>−10°C</span><span>0°C (Điểm nút)</span><span>100°C (Điểm nút)</span><span>150°C</span>
+        </div>
+        <input type="range" class="water-slider" id="temp-slider" min="-10" max="150" value="0" oninput="updateWater(this.value)">
+      </div>
+
+      <div class="phase-info" id="phase-info">
+        <strong id="phase-title">❄ Chất: Nước đá (Băng)</strong><br>
+        <span id="phase-desc">Đang tích lũy lượng (nhiệt độ). Nước ở thể rắn. Lượng thay đổi nhưng chất chưa thay đổi.</span>
+      </div>
+    </div>
+
+    <!-- SPIRAL SIMULATOR -->
+    <div class="sim-card">
+      <div class="sim-card-title">🌀 Quy luật Phủ định của phủ định: Hạt lúa</div>
+      <div class="sim-card-desc">Click "Tiếp theo" để xem vòng xoáy ốc đi lên — mỗi giai đoạn phủ định giai đoạn trước nhưng ở trình độ cao hơn</div>
+      
+      <svg class="spiral-svg" viewBox="0 0 500 120" height="120">
+        <defs>
+          <marker id="sp-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M2 2L8 5L2 8" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <!-- Stage circles -->
+        <circle id="sp0" cx="80" cy="60" r="40" fill="rgba(201,168,76,0.1)" stroke="rgba(201,168,76,0.3)" stroke-width="1.5"/>
+        <text x="80" y="55" text-anchor="middle" fill="#c9a84c" font-family="'Be Vietnam Pro',sans-serif" font-size="18">🌾</text>
+        <text x="80" y="75" text-anchor="middle" fill="#a09080" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Hạt lúa</text>
+        
+        <path d="M122 60 Q170 30 210 60" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" marker-end="url(#sp-arr)" id="sp-arr1"/>
+        
+        <circle id="sp1" cx="250" cy="60" r="40" fill="rgba(58,155,124,0.1)" stroke="rgba(58,155,124,0.25)" stroke-width="1.5"/>
+        <text x="250" y="55" text-anchor="middle" fill="#3a9b7c" font-family="'Be Vietnam Pro',sans-serif" font-size="18">🌱</text>
+        <text x="250" y="75" text-anchor="middle" fill="#406050" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Cây lúa</text>
+        
+        <path d="M292 60 Q340 30 380 60" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" marker-end="url(#sp-arr)" id="sp-arr2"/>
+        
+        <circle id="sp2" cx="420" cy="60" r="40" fill="rgba(201,168,76,0.12)" stroke="rgba(201,168,76,0.35)" stroke-width="1.5"/>
+        <text x="420" y="55" text-anchor="middle" fill="#c9a84c" font-family="'Be Vietnam Pro',sans-serif" font-size="18">🌾</text>
+        <text x="420" y="72" text-anchor="middle" fill="#c9a84c" font-family="'Be Vietnam Pro',sans-serif" font-size="10">Nhiều hạt</text>
+        <text x="420" y="84" text-anchor="middle" fill="#a09080" font-family="'Be Vietnam Pro',sans-serif" font-size="9">(cao hơn)</text>
+
+        <!-- Spiral indicator -->
+        <path d="M82 20 Q250 -5 418 18" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="250" y="10" text-anchor="middle" fill="rgba(201,168,76,0.4)" font-family="'Be Vietnam Pro',sans-serif" font-size="9">↑ Đường xoáy ốc đi lên</text>
+      </svg>
+
+      <div id="spiral-stages">
+        <div class="spiral-stage active" id="ss0">
+          <div class="spiral-dot">🌾</div>
+          <div class="spiral-text">
+            <h4>Giai đoạn 1 — Hạt lúa (Cái cũ)</h4>
+            <p>Điểm xuất phát. Hạt lúa tồn tại với chất ban đầu của nó.</p>
+          </div>
+        </div>
+        <div class="spiral-connector" id="sc1" style="opacity:0.3"></div>
+        <div class="spiral-stage" id="ss1">
+          <div class="spiral-dot">🌱</div>
+          <div class="spiral-text">
+            <h4>Giai đoạn 2 — Cây lúa (Phủ định lần 1)</h4>
+            <p>Hạt lúa nảy mầm → cây lúa phủ định hạt lúa. Kế thừa: vật chất từ hạt. Phát triển: có lá, thân, rễ.</p>
+          </div>
+        </div>
+        <div class="spiral-connector" id="sc2" style="opacity:0.3"></div>
+        <div class="spiral-stage" id="ss2">
+          <div class="spiral-dot">🌾</div>
+          <div class="spiral-text">
+            <h4>Giai đoạn 3 — Nhiều hạt (Phủ định lần 2)</h4>
+            <p>Cây lúa sinh nhiều hạt → phủ định cây lúa. Trông giống hạt ban đầu nhưng số lượng nhiều hơn, chất lượng cao hơn → <strong>đường xoáy ốc đi lên</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="spiral-nav" style="margin-top:1.2rem">
+        <button class="spiral-btn primary" onclick="spiralNext()">Tiếp theo →</button>
+        <button class="spiral-btn" onclick="spiralReset()">Bắt đầu lại</button>
+        <span id="spiral-step-indicator" style="margin-left:auto;font-size:0.82rem;color:var(--text3);align-self:center">Giai đoạn 1/3</span>
+      </div>
+    </div>
+
+    <!-- MAUU THUAN -->
+    <div class="sim-card">
+      <div class="sim-card-title">⚡ Quy luật Mâu thuẫn: Thống nhất và đấu tranh</div>
+      <div class="sim-card-desc">Quan sát mối quan hệ giữa các mặt đối lập trong sinh vật</div>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div style="background:var(--bg3);border-radius:10px;padding:1rem;border:1px solid rgba(58,155,124,0.25);text-align:center">
+          <div style="font-size:1.8rem;margin-bottom:0.5rem">⬆</div>
+          <div style="font-size:0.88rem;font-weight:700;color:var(--teal2);margin-bottom:0.3rem">Đồng hóa</div>
+          <div style="font-size:0.78rem;color:var(--text3)">Tích lũy năng lượng, xây dựng tế bào</div>
+          <div id="dh-bar-wrap" style="background:var(--bg4);border-radius:4px;height:8px;margin-top:0.8rem;overflow:hidden">
+            <div id="dh-bar" style="height:100%;background:var(--teal);border-radius:4px;width:50%;transition:width 0.5s"></div>
+          </div>
+          <div id="dh-val" style="font-size:0.8rem;color:var(--teal2);margin-top:0.3rem">50%</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:10px;padding:1rem;border:1px solid rgba(201,97,74,0.25);text-align:center">
+          <div style="font-size:1.8rem;margin-bottom:0.5rem">⬇</div>
+          <div style="font-size:0.88rem;font-weight:700;color:var(--coral2);margin-bottom:0.3rem">Dị hóa</div>
+          <div style="font-size:0.78rem;color:var(--text3)">Tiêu hao năng lượng, phân hủy chất</div>
+          <div id="dih-bar-wrap" style="background:var(--bg4);border-radius:4px;height:8px;margin-top:0.8rem;overflow:hidden">
+            <div id="dih-bar" style="height:100%;background:var(--coral);border-radius:4px;width:50%;transition:width 0.5s"></div>
+          </div>
+          <div id="dih-val" style="font-size:0.8rem;color:var(--coral2);margin-top:0.3rem">50%</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:0.75rem">
+        <label style="font-size:0.82rem;color:var(--text2);display:block;margin-bottom:0.4rem">Trạng thái cơ thể: Hoạt động ←→ Nghỉ ngơi</label>
+        <input type="range" class="water-slider" id="bio-slider" min="0" max="100" value="50" oninput="updateBio(this.value)">
+      </div>
+      
+      <div class="phase-info" id="bio-info">
+        <strong>⚖ Cân bằng sinh lý</strong><br>
+        <span>Đồng hóa và dị hóa ở mức cân bằng. Đây là trạng thái <strong>thống nhất</strong> của các mặt đối lập — cả hai cùng tồn tại trong một chỉnh thể. Sự đấu tranh duy trì sự sống.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SECTION: DRAG ==================== -->
+<div id="section-drag" class="section">
+  <div class="sim-wrap">
+    <div class="sim-title">Phân loại khái niệm</div>
+    <div class="sim-sub">Kéo và thả các thẻ vào đúng nhóm để kiểm tra hiểu biết</div>
+
+    <!-- DRAG 1: DV vs DT -->
+    <div class="sim-card">
+      <div class="sim-card-title">Phân loại: Duy vật vs Duy tâm</div>
+      <div class="sim-card-desc">Kéo thả các câu nói/quan niệm vào đúng trường phái triết học</div>
+      
+      <div style="margin-bottom:1rem">
+        <div style="font-size:0.82rem;color:var(--text3);margin-bottom:0.6rem">Ngân hàng câu hỏi (kéo từ đây):</div>
+        <div class="drag-arena" id="drag-bank"></div>
+      </div>
+
+      <div class="drop-zones-row">
+        <div class="drop-zone" id="dz-dv" ondragover="dragOver(event)" ondrop="dropCard(event,'dv')">
+          <div class="drop-zone-title dv-color">🔵 Chủ nghĩa Duy vật</div>
+        </div>
+        <div class="drop-zone" id="dz-dt" ondragover="dragOver(event)" ondrop="dropCard(event,'dt')">
+          <div class="drop-zone-title dt-color">🔴 Chủ nghĩa Duy tâm</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:1rem;margin-top:0.75rem">
+        <div class="drag-score">Đúng: <span class="score-num" id="drag-score">0</span> / <span id="drag-total">0</span></div>
+        <button class="reset-btn" onclick="resetDrag()">↺ Thử lại</button>
+      </div>
+    </div>
+
+    <!-- DRAG 2: Nguồn gốc ý thức -->
+    <div class="sim-card">
+      <div class="sim-card-title">Phân loại: Nguồn gốc của Ý thức</div>
+      <div class="sim-card-desc">Phân biệt nguồn gốc tự nhiên và nguồn gốc xã hội của ý thức</div>
+      
+      <div style="margin-bottom:1rem">
+        <div style="font-size:0.82rem;color:var(--text3);margin-bottom:0.6rem">Các yếu tố (kéo từ đây):</div>
+        <div class="drag-arena" id="drag-bank2"></div>
+      </div>
+
+      <div class="drop-zones-row">
+        <div class="drop-zone" id="dz-tn" ondragover="dragOver(event)" ondrop="dropCard2(event,'tn')">
+          <div class="drop-zone-title" style="color:var(--blue2)">🧠 Nguồn gốc tự nhiên</div>
+        </div>
+        <div class="drop-zone" id="dz-xh" ondragover="dragOver(event)" ondrop="dropCard2(event,'xh')">
+          <div class="drop-zone-title" style="color:var(--amber2)">👥 Nguồn gốc xã hội</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:1rem;margin-top:0.75rem">
+        <div class="drag-score">Đúng: <span class="score-num" id="drag-score2">0</span> / <span id="drag-total2">0</span></div>
+        <button class="reset-btn" onclick="resetDrag2()">↺ Thử lại</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SECTION: QUIZ ==================== -->
+<div id="section-quiz" class="section">
+  <div class="sim-wrap">
+    <div class="sim-title">Trắc nghiệm Đúng / Sai</div>
+    <div class="sim-sub">Mỗi câu hỏi được phân tích kỹ — đặc biệt chú ý các từ "bẫy logic" như "tuyệt đối", "hoàn toàn", "duy nhất"</div>
+    
+    <div class="quiz-container">
+      <div class="quiz-progress">
+        <div class="quiz-score-display">Điểm: <span id="q-score">0</span> / <span id="q-total">0</span> câu đúng</div>
+        <button class="reset-btn" onclick="resetQuiz()">↺ Làm lại</button>
+      </div>
+      <div id="quiz-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SECTION: NOTES ==================== -->
+<div id="section-notes" class="section">
+  <div class="content-wrap">
+    <div style="margin-bottom:2rem">
+      <div class="hero-label" style="text-align:left">Tóm tắt kiến thức</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold3);margin-bottom:0.5rem">Chương 1 & 2 — Toàn diện</h1>
+      <p style="color:var(--text2);font-size:0.9rem">Hiểu bản chất, có ví dụ minh họa — đủ để thi</p>
+    </div>
+
+    <div class="content-section">
+      <div class="content-section-title">Chương 1: Khái luận về Triết học</div>
+      
+      <div class="content-subsection">
+        <h3>Vấn đề cơ bản của Triết học</h3>
+        <div class="content-body">
+          Theo Ph. Ăngghen, vấn đề cơ bản là <strong>mối quan hệ giữa vật chất và ý thức</strong>, gồm 2 mặt:
+        </div>
+        <table class="phi-table" style="margin-top:0.8rem">
+          <tr><th>Mặt</th><th>Câu hỏi</th><th>Phân chia</th></tr>
+          <tr><td><strong>Bản thể luận</strong></td><td>Cái nào có trước?</td><td>Duy vật vs Duy tâm</td></tr>
+          <tr><td><strong>Nhận thức luận</strong></td><td>Có nhận thức được không?</td><td>Khả tri vs Bất khả tri</td></tr>
+        </table>
+      </div>
+
+      <div class="content-subsection">
+        <h3>Các trường phái triết học</h3>
+        <div class="tag-row" style="margin-bottom:0.8rem">
+          <span class="tag dv">CNDV chất phác</span>
+          <span class="tag dv">CNDV siêu hình</span>
+          <span class="tag dv">CNDV biện chứng ✓</span>
+          <span class="tag dt">DT khách quan</span>
+          <span class="tag dt">DT chủ quan</span>
+        </div>
+        <div class="callout">
+          💡 <strong>Duy tâm chủ quan</strong> (Berkeley): "Tồn tại là được cảm nhận" — nếu tôi nhắm mắt, cái bàn không còn tồn tại? Mác-Lênin bác bỏ: vật chất tồn tại độc lập với cảm giác.
+        </div>
+      </div>
+
+      <div class="content-subsection">
+        <h3>Phép biện chứng vs Siêu hình</h3>
+        <table class="phi-table">
+          <tr><th></th><th>Siêu hình</th><th>Biện chứng</th></tr>
+          <tr><td>Nhìn thế giới</td><td>Cô lập, tĩnh tại</td><td>Liên hệ, vận động</td></tr>
+          <tr><td>Mâu thuẫn</td><td>Không chấp nhận</td><td>Nguồn gốc phát triển</td></tr>
+          <tr><td>Ví dụ</td><td>"Nước là nước"</td><td>"Nước thành hơi, thành đá..."</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <div class="content-section-title">Chương 2: Chủ nghĩa duy vật biện chứng</div>
+      
+      <div class="content-subsection">
+        <h3>Định nghĩa vật chất của Lênin (PHẢI NHỚ)</h3>
+        <div class="callout" style="border-color:var(--gold);font-style:italic">
+          "Vật chất là một phạm trù triết học dùng để chỉ thực tại khách quan được đem lại cho con người trong cảm giác, được cảm giác của chúng ta chép lại, chụp lại, phản ánh, và tồn tại không lệ thuộc vào cảm giác."
+        </div>
+        <table class="phi-table" style="margin-top:0.5rem">
+          <tr><th>Nội dung</th><th>Ý nghĩa</th></tr>
+          <tr><td>"Phạm trù triết học"</td><td>Không đồng nhất với bất kỳ dạng vật chất cụ thể nào</td></tr>
+          <tr><td>"Thực tại khách quan"</td><td>Tồn tại ngoài và độc lập với ý thức</td></tr>
+          <tr><td>"Được đem lại trong cảm giác"</td><td>Bác bỏ bất khả tri luận</td></tr>
+          <tr><td>"Không lệ thuộc vào cảm giác"</td><td>Bác bỏ chủ nghĩa duy tâm</td></tr>
+        </table>
+      </div>
+
+      <div class="content-subsection">
+        <h3>Ba quy luật cơ bản</h3>
+        <div class="callout tip" style="margin-bottom:0.6rem">
+          <strong>Quy luật Mâu thuẫn</strong> → Nguồn gốc của phát triển<br>
+          Mọi sự vật chứa các mặt đối lập. Thống nhất + đấu tranh → vận động phát triển.
+        </div>
+        <div class="callout info" style="margin-bottom:0.6rem">
+          <strong>Quy luật Lượng – Chất</strong> → Cách thức phát triển<br>
+          Lượng tích lũy đến <em>điểm nút</em> → <em>bước nhảy</em> → chất mới. VD: Nước 0°C→100°C.
+        </div>
+        <div class="callout" style="border-color:var(--purple)">
+          <strong>Quy luật Phủ định của phủ định</strong> → Xu hướng phát triển<br>
+          Phủ định biện chứng = kế thừa có chọn lọc. Phát triển theo đường xoáy ốc đi lên.
+        </div>
+      </div>
+
+      <div class="content-subsection">
+        <h3>6 Cặp phạm trù</h3>
+        <table class="phi-table">
+          <tr><th>Cặp</th><th>Ý nghĩa PP luận</th></tr>
+          <tr><td><strong>Cái chung – Cái riêng</strong></td><td>Không tuyệt đối hóa cái chung (giáo điều) hoặc cái riêng (kinh nghiệm)</td></tr>
+          <tr><td><strong>Nguyên nhân – Kết quả</strong></td><td>Muốn kết quả tốt → tác động vào nguyên nhân</td></tr>
+          <tr><td><strong>Tất nhiên – Ngẫu nhiên</strong></td><td>Dựa vào tất nhiên, không bỏ qua ngẫu nhiên</td></tr>
+          <tr><td><strong>Nội dung – Hình thức</strong></td><td>Nội dung quyết định, không xem nhẹ hình thức</td></tr>
+          <tr><td><strong>Bản chất – Hiện tượng</strong></td><td>Không dừng ở bề ngoài, phải tìm bản chất</td></tr>
+          <tr><td><strong>Khả năng – Hiện thực</strong></td><td>Dựa vào hiện thực, tạo điều kiện biến khả năng tốt thành hiện thực</td></tr>
+        </table>
+      </div>
+
+      <div class="content-subsection">
+        <h3>Thực tiễn và Nhận thức</h3>
+        <div class="content-body">
+          <strong>Thực tiễn</strong> có 4 vai trò với nhận thức:
+          <div class="tag-row" style="margin:0.6rem 0">
+            <span class="tag bc">Cơ sở</span>
+            <span class="tag bc">Mục đích</span>
+            <span class="tag bc">Động lực</span>
+            <span class="tag bc">Tiêu chuẩn chân lý</span>
+          </div>
+          Con đường nhận thức: <strong>Trực quan sinh động → Tư duy trừu tượng → Thực tiễn</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <div class="content-section-title">🎯 Bảng ghi nhớ siêu nhanh</div>
+      <table class="phi-table">
+        <tr><th>Chủ đề</th><th>Từ khóa cốt lõi</th></tr>
+        <tr><td>Vấn đề cơ bản TH</td><td>Vật chất ↔ Ý thức (2 mặt: bản thể + nhận thức)</td></tr>
+        <tr><td>CNDV biện chứng</td><td>Vật chất trước, ý thức sau + luôn vận động</td></tr>
+        <tr><td>Định nghĩa Lênin</td><td>Thực tại khách quan + độc lập với cảm giác</td></tr>
+        <tr><td>Quy luật Mâu thuẫn</td><td>Nguồn gốc phát triển = đấu tranh mặt đối lập</td></tr>
+        <tr><td>Quy luật L-C</td><td>Điểm nút → Bước nhảy → Chất mới</td></tr>
+        <tr><td>Quy luật PĐ của PĐ</td><td>Phủ định + kế thừa → Xoáy ốc đi lên</td></tr>
+        <tr><td>Thực tiễn</td><td>Tiêu chuẩn của chân lý (quan trọng nhất)</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLTIP -->
+<div class="mm-tooltip" id="tooltip"></div>
+
+<script>
+// ============ NAV ============
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  closeDetail();
+}
+
+// ============ MINDMAP DETAIL ============
+const detailData = {
+  center: { tag: 'Tổng quan', title: 'Triết học Mác-Lênin', body: `<p>Hệ thống triết học hoàn chỉnh nhất, kết hợp <strong>chủ nghĩa duy vật biện chứng</strong> và <strong>chủ nghĩa duy vật lịch sử</strong>.</p><div class="highlight">3 nguồn gốc lý luận: Triết học cổ điển Đức (Hegel, Feuerbach) + Kinh tế chính trị học Anh + Chủ nghĩa xã hội không tưởng Pháp</div><p>Có 2 chức năng: <strong>Thế giới quan</strong> (hiểu thế giới) và <strong>Phương pháp luận</strong> (hành động đúng đắn).</p>` },
+  ch1: { tag: 'Chương 1', title: 'Khái luận về Triết học', body: `<p>Triết học là <strong>hình thái ý thức xã hội</strong> đặc biệt, giải thích thế giới một cách có hệ thống, tổng quát.</p><p style="margin-top:0.8rem"><strong>2 nguồn gốc:</strong></p><p>• Nhận thức: tư duy đủ trưởng thành để trừu tượng hóa</p><p>• Xã hội: có tầng lớp trí thức làm lao động trí óc</p>` },
+  vdcb: { tag: 'Chương 1 — Cốt lõi', title: 'Vấn đề cơ bản của Triết học', body: `<p>Là <strong>mối quan hệ giữa vật chất và ý thức</strong> (hay giữa tồn tại và tư duy).</p><p style="margin-top:0.8rem"><strong>Mặt thứ nhất (Bản thể luận):</strong><br>Cái nào có trước? → Duy vật vs Duy tâm</p><p style="margin-top:0.6rem"><strong>Mặt thứ hai (Nhận thức luận):</strong><br>Có nhận thức được không? → Khả tri vs Bất khả tri</p><div class="highlight">⚠ Hay ra thi! Nhớ: 2 mặt, không phải 1 mặt.</div>` },
+  truongphai: { tag: 'Chương 1', title: 'Các trường phái Triết học', body: `<p><strong>🔵 Duy vật:</strong> Vật chất có trước, ý thức có sau<br>• Chất phác cổ đại (nước, lửa...)<br>• Siêu hình TK XV-XVIII<br>• Biện chứng (Mác-Lênin) ✓</p><p style="margin-top:0.8rem"><strong>🔴 Duy tâm:</strong> Ý thức có trước<br>• Khách quan: "Ý niệm tuyệt đối" (Hegel)<br>• Chủ quan: "Tồn tại là được cảm nhận" (Berkeley)</p>` },
+  raдoi: { tag: 'Chương 1', title: 'Triết học Mác ra đời', body: `<p><strong>3 điều kiện:</strong></p><p>1. <strong>KT-XH:</strong> CNTB phát triển, giai cấp CN bị bóc lột → cần lý luận</p><p>2. <strong>Khoa học:</strong> Bảo toàn năng lượng + Tế bào học + Tiến hóa Darwin</p><p>3. <strong>Lý luận:</strong> Triết học Đức + KT chính trị Anh + CNXH Pháp</p><div class="highlight">Tuyên ngôn Đảng CS (1848) và Tư bản (1867) là 2 tác phẩm tiêu biểu.</div>` },
+  vatchat: { tag: 'Chương 2 — I', title: 'Vật chất', body: `<p><strong>Định nghĩa Lênin:</strong></p><p style="font-style:italic;color:#c9a84c;margin:0.5rem 0">"...thực tại khách quan... tồn tại không lệ thuộc vào cảm giác."</p><p><strong>Phương thức tồn tại:</strong> Vận động trong không gian và thời gian.</p><p style="margin-top:0.6rem"><strong>5 hình thức vận động:</strong><br>Cơ học → Vật lý → Hóa học → Sinh học → Xã hội</p><div class="highlight">Vận động là tuyệt đối; đứng im là tương đối (trạng thái đặc biệt).</div>` },
+  dinhlenin: { tag: 'Quan trọng nhất', title: 'Định nghĩa Lênin về Vật chất', body: `<p>4 điểm mấu chốt:</p><p>1. "Phạm trù triết học" → không đồng nhất với nguyên tử, điện tử...</p><p>2. "Thực tại khách quan" → độc lập với ý thức</p><p>3. "Được đem lại trong cảm giác" → bác bỏ Bất khả tri</p><p>4. "Không lệ thuộc vào cảm giác" → bác bỏ Duy tâm</p><div class="highlight">💡 Mặt trăng tồn tại trước khi loài người biết đến nó — đó là thực tại khách quan.</div>` },
+  ythuc: { tag: 'Chương 2 — I', title: 'Nguồn gốc Ý thức', body: `<p><strong>Nguồn gốc tự nhiên:</strong><br>• Bộ óc là cơ quan vật chất của ý thức<br>• Ý thức là sự phản ánh tích cực, sáng tạo</p><p style="margin-top:0.8rem"><strong>Nguồn gốc xã hội (quan trọng hơn!):</strong><br>• <strong>Lao động:</strong> thúc đẩy bộ óc hoạt động<br>• <strong>Ngôn ngữ:</strong> "vỏ vật chất" của ý thức</p><div class="highlight">Vượn người ≠ con người: vì không có lao động mục đích + không có ngôn ngữ.</div>` },
+  qhvcyt: { tag: 'Hay thi nhất', title: 'Quan hệ Vật chất – Ý thức', body: `<p><strong>Nguyên tắc:</strong><br>• Vật chất quyết định ý thức<br>• Ý thức tác động ngược lại vật chất</p><p style="margin-top:0.8rem"><strong>Ý nghĩa PP luận:</strong><br>✓ Tôn trọng tính khách quan → tránh chủ quan<br>✓ Phát huy tính năng động → tránh thụ động</p><div class="highlight">VD: Đổi mới (ý thức đúng) → kinh tế VN phát triển (vật chất thay đổi).</div>` },
+  pbc: { tag: 'Chương 2 — II', title: 'Phép biện chứng duy vật', body: `<p>Gồm: <strong>2 nguyên lý</strong> + <strong>6 cặp phạm trù</strong> + <strong>3 quy luật cơ bản</strong></p><p style="margin-top:0.8rem"><strong>2 Nguyên lý:</strong><br>• Mối liên hệ phổ biến<br>• Sự phát triển (đường xoáy ốc)</p><div class="highlight">Phép biện chứng = phương pháp tư duy, không phải lập trường.</div>` },
+  nguyenli: { tag: 'Chương 2 — II', title: '2 Nguyên lý cơ bản', body: `<p><strong>1. Nguyên lý liên hệ phổ biến:</strong><br>Mọi sự vật đều có liên hệ — không có gì tồn tại cô lập.<br>Tính chất: khách quan, phổ biến, đa dạng.<br>→ PP luận: Quan điểm toàn diện</p><p style="margin-top:0.8rem"><strong>2. Nguyên lý phát triển:</strong><br>Mọi sự vật vận động không ngừng theo đường xoáy ốc.<br>→ PP luận: Quan điểm phát triển, ủng hộ cái mới</p>` },
+  phomtru: { tag: 'Chương 2 — II', title: '6 Cặp phạm trù', body: `<p>1. <strong>Cái chung – Cái riêng:</strong> chung tồn tại trong riêng<br>2. <strong>Nguyên nhân – Kết quả:</strong> nhân quả là tất yếu<br>3. <strong>Tất nhiên – Ngẫu nhiên:</strong> NN là hình thức biểu hiện của TN<br>4. <strong>Nội dung – Hình thức:</strong> ND quyết định HT<br>5. <strong>Bản chất – Hiện tượng:</strong> BC quyết định HT<br>6. <strong>Khả năng – Hiện thực:</strong> tạo điều kiện biến KN thành HT</p>` },
+  quyluat: { tag: 'Quan trọng nhất', title: '3 Quy luật cơ bản', body: `<p><strong>1. Mâu thuẫn</strong> (Nguồn gốc phát triển):<br>Thống nhất + Đấu tranh của các mặt đối lập</p><p style="margin-top:0.7rem"><strong>2. Lượng – Chất</strong> (Cách thức phát triển):<br>Tích lũy → Điểm nút → Bước nhảy → Chất mới</p><p style="margin-top:0.7rem"><strong>3. Phủ định của phủ định</strong> (Xu hướng):<br>Phủ định biện chứng = kế thừa + phát triển</p><div class="highlight">Nhớ: Nguồn gốc → Cách thức → Xu hướng</div>` },
+  nhanihuc: { tag: 'Chương 2 — III', title: 'Lý luận nhận thức', body: `<p>Con đường: <strong>Trực quan sinh động → Tư duy trừu tượng → Thực tiễn</strong></p><p style="margin-top:0.8rem"><strong>4 vai trò của thực tiễn:</strong><br>• Cơ sở của nhận thức<br>• Mục đích của nhận thức<br>• Động lực của nhận thức<br>• <strong>Tiêu chuẩn của chân lý</strong> (quan trọng nhất!)</p>` },
+  thuctien: { tag: 'Chương 2 — III', title: 'Vai trò của Thực tiễn', body: `<p><strong>3 hình thức thực tiễn:</strong><br>1. Sản xuất vật chất (cơ bản nhất)<br>2. Hoạt động chính trị-xã hội<br>3. Thực nghiệm khoa học</p><div class="highlight">💡 VD tiêu chuẩn chân lý: Trước đây nghĩ Trái Đất là trung tâm vũ trụ → thực tiễn bác bỏ → thực tiễn là thước đo chân lý.</div>` },
+  conduong: { tag: 'Chương 2 — III', title: 'Con đường biện chứng của nhận thức', body: `<p><strong>Giai đoạn 1 — Trực quan sinh động:</strong><br>Cảm giác, tri giác, biểu tượng → phong phú nhưng bề ngoài</p><p style="margin-top:0.7rem"><strong>Giai đoạn 2 — Tư duy trừu tượng:</strong><br>Khái niệm, phán đoán, suy luận → nắm bản chất</p><p style="margin-top:0.7rem"><strong>Giai đoạn 3 — Thực tiễn:</strong><br>Kiểm tra và áp dụng → nhận thức cao hơn</p>` },
+  chantly: { tag: 'Chương 2 — III', title: 'Chân lý', body: `<p><strong>Chân lý:</strong> Tri thức phản ánh đúng thực tại, được thực tiễn kiểm nghiệm.</p><p style="margin-top:0.7rem"><strong>Tính cụ thể của chân lý:</strong><br>"Nước sôi ở 100°C" — đúng ở áp suất chuẩn. Trên đỉnh Everest nước sôi ở ~70°C.</p><div class="highlight">Tính tương đối: nhận thức đúng nhưng chưa đầy đủ, còn có thể bổ sung.</div>` },
+};
+
+function showDetail(key) {
+  const d = detailData[key];
+  if (!d) return;
+  document.getElementById('d-tag').textContent = d.tag;
+  document.getElementById('d-title').textContent = d.title;
+  document.getElementById('d-body').innerHTML = d.body;
+  document.getElementById('detail-panel').classList.add('open');
+}
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+}
+
+// ============ WATER SIMULATOR ============
+function updateWater(v) {
+  v = parseInt(v);
+  document.getElementById('temp-disp').textContent = v + '°C';
+  const fill = document.getElementById('water-fill');
+  const badge = document.getElementById('state-badge');
+  const info = document.getElementById('phase-info');
+  const dnut = document.getElementById('diem-nut');
+  const steam = document.getElementById('steam-container');
+
+  let pct = Math.max(10, Math.min(95, ((v + 10) / 160) * 85 + 10));
+
+  if (v < 0) {
+    fill.style.background = 'linear-gradient(to top, #5090c8, #7ab0e8)';
+    fill.style.height = pct + '%';
+    badge.className = 'state-badge state-da'; badge.textContent = '❄ Nước đá (Rắn)';
+    info.innerHTML = '<strong>❄ Chất: Nước đá (Băng)</strong><br><span>Đang tích lũy lượng (nhiệt độ tăng dần). Nước ở thể rắn. <em>Lượng thay đổi nhưng chất chưa thay đổi</em>.</span>';
+    steam.innerHTML = ''; dnut.style.opacity = '0';
+  } else if (v < 100) {
+    const blueness = Math.round(40 + (v / 100) * 40);
+    fill.style.background = `linear-gradient(to top, #1a5fa8, hsl(${210 - v * 0.5},70%,${40 + v * 0.1}%))`;
+    fill.style.height = pct + '%';
+    badge.className = 'state-badge state-do'; badge.textContent = '💧 Nước lỏng';
+    if (v >= 95) {
+      info.innerHTML = '<strong style="color:var(--amber2)">⚠ Đang tiến đến Điểm nút!</strong><br><span>Lượng (nhiệt độ) gần đạt ngưỡng. Chuẩn bị có <em>bước nhảy</em> chuyển hóa chất!</span>';
+    } else {
+      info.innerHTML = '<strong>💧 Chất: Nước lỏng</strong><br><span>Lượng tiếp tục tích lũy. <em>Độ</em> là giới hạn mà trong đó lượng thay đổi nhưng chất chưa thay đổi.</span>';
+    }
+    steam.innerHTML = ''; dnut.style.opacity = v >= 95 ? '1' : '0';
+  } else {
+    fill.style.background = 'linear-gradient(to top, rgba(100,150,220,0.3), rgba(180,200,255,0.15))';
+    fill.style.height = '20%';
+    badge.className = 'state-badge state-hoi'; badge.textContent = '💨 Hơi nước (Khí)';
+    info.innerHTML = '<strong style="color:var(--green2)">🔔 Bước nhảy đã xảy ra!</strong><br><span>Tại <strong>100°C (điểm nút)</strong>, lượng đã tích lũy đủ. <em>Bước nhảy</em> diễn ra: nước chuyển thành hơi — <strong>chất mới đã ra đời</strong>.</span>';
+    dnut.style.opacity = '0';
+    // Steam
+    let html = '';
+    for (let i = 0; i < 8; i++) {
+      const x = 20 + Math.random() * 120;
+      const delay = Math.random() * 1.5;
+      const dur = 1.5 + Math.random();
+      html += `<div class="steam-particle" style="left:${x}px;bottom:20%;animation-delay:${delay}s;animation-duration:${dur}s"></div>`;
+    }
+    steam.innerHTML = html;
+  }
+}
+
+// ============ BIO SIMULATOR ============
+function updateBio(v) {
+  v = parseInt(v);
+  const dh = Math.round(100 - v);
+  const dih = v;
+  document.getElementById('dh-bar').style.width = dh + '%';
+  document.getElementById('dih-bar').style.width = dih + '%';
+  document.getElementById('dh-val').textContent = dh + '%';
+  document.getElementById('dih-val').textContent = dih + '%';
+  const info = document.getElementById('bio-info');
+  if (v < 30) {
+    info.innerHTML = '<strong style="color:var(--teal2)">⬆ Đồng hóa mạnh hơn (Nghỉ ngơi, ăn uống)</strong><br><span>Cơ thể tích lũy năng lượng, xây dựng tế bào. Hai mặt đối lập vẫn cùng tồn tại trong <strong>thống nhất</strong> — đây là điều kiện duy trì sự sống.</span>';
+  } else if (v > 70) {
+    info.innerHTML = '<strong style="color:var(--coral2)">⬇ Dị hóa mạnh hơn (Hoạt động cường độ cao)</strong><br><span>Cơ thể tiêu hao năng lượng. Hai mặt đối lập đang <strong>đấu tranh</strong> mạnh — đây là động lực tạo ra sự phát triển (tập luyện → cơ bắp phát triển).</span>';
+  } else {
+    info.innerHTML = '<strong>⚖ Cân bằng sinh lý</strong><br><span>Đồng hóa và dị hóa ở mức cân bằng. <strong>Thống nhất</strong> của các mặt đối lập — cả hai cùng tồn tại và <strong>đấu tranh</strong> duy trì sự sống.</span>';
+  }
+}
+
+// ============ SPIRAL ============
+let spiralStep = 0;
+function spiralNext() {
+  spiralStep = Math.min(2, spiralStep + 1);
+  updateSpiral();
+}
+function spiralReset() {
+  spiralStep = 0;
+  updateSpiral();
+}
+function updateSpiral() {
+  for (let i = 0; i <= 2; i++) {
+    const s = document.getElementById('ss' + i);
+    s.classList.toggle('active', i <= spiralStep);
+    if (i < 2) document.getElementById('sc' + (i + 1)).style.opacity = i < spiralStep ? '1' : '0.3';
+    // SVG highlights
+    const circle = document.getElementById('sp' + i);
+    if (circle) {
+      if (i <= spiralStep) {
+        circle.setAttribute('stroke-width', i === spiralStep ? '2.5' : '1.5');
+      } else {
+        circle.setAttribute('stroke-width', '1');
+        circle.setAttribute('opacity', '0.5');
+      }
+    }
+  }
+  document.getElementById('spiral-step-indicator').textContent = 'Giai đoạn ' + (spiralStep + 1) + '/3';
+}
+
+// ============ DRAG AND DROP ============
+const dvCards = [
+  { id: 'c1', text: '"Có thực mới vực được đạo"', answer: 'dv' },
+  { id: 'c2', text: '"Vật chất quyết định ý thức"', answer: 'dv' },
+  { id: 'c3', text: 'Thế giới do Thần linh tạo ra', answer: 'dt' },
+  { id: 'c4', text: '"Tồn tại là được cảm nhận" (Berkeley)', answer: 'dt' },
+  { id: 'c5', text: '"Sống chết có số, phú quý tại trời"', answer: 'dt' },
+  { id: 'c6', text: 'Nguyên tử là nền tảng của thế giới (Democritus)', answer: 'dv' },
+  { id: 'c7', text: '"Ý niệm tuyệt đối" sinh ra thế giới (Hegel)', answer: 'dt' },
+  { id: 'c8', text: 'Tự nhiên tồn tại không cần Thần linh', answer: 'dv' },
+];
+
+let dragScore = 0, dragAnswered = 0;
+let currentDrag = null;
+
+function initDrag() {
+  const bank = document.getElementById('drag-bank');
+  bank.innerHTML = '';
+  dvCards.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'drag-card';
+    el.draggable = true;
+    el.id = 'drag-' + c.id;
+    el.textContent = c.text;
+    el.dataset.answer = c.answer;
+    el.addEventListener('dragstart', e => { currentDrag = el; el.classList.add('dragging'); });
+    el.addEventListener('dragend', e => el.classList.remove('dragging'));
+    bank.appendChild(el);
+  });
+  dragScore = 0; dragAnswered = 0;
+  document.getElementById('drag-score').textContent = '0';
+  document.getElementById('drag-total').textContent = '0';
+  document.getElementById('dz-dv').querySelectorAll('.drag-card').forEach(e => e.remove());
+  document.getElementById('dz-dt').querySelectorAll('.drag-card').forEach(e => e.remove());
+}
+
+function dragOver(e) { e.preventDefault(); e.currentTarget.classList.add('over'); }
+document.addEventListener('dragenter', () => {});
+document.querySelectorAll && document.querySelectorAll('.drop-zone') && document.querySelectorAll('.drop-zone').forEach(z => {
+  z.addEventListener('dragleave', () => z.classList.remove('over'));
+});
+
+function dropCard(e, zone) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('over');
+  if (!currentDrag || currentDrag.dataset.dropped) return;
+  const correct = currentDrag.dataset.answer === zone;
+  currentDrag.dataset.dropped = '1';
+  dragAnswered++;
+  if (correct) { dragScore++; currentDrag.classList.add('correct'); }
+  else { currentDrag.classList.add('wrong'); setTimeout(() => currentDrag.classList.remove('wrong'), 400); }
+  e.currentTarget.appendChild(currentDrag);
+  document.getElementById('drag-score').textContent = dragScore;
+  document.getElementById('drag-total').textContent = dragAnswered;
+  currentDrag = null;
+}
+function resetDrag() { initDrag(); }
+
+// DRAG 2
+const ythucCards = [
+  { id: 'y1', text: 'Bộ óc người', answer: 'tn' },
+  { id: 'y2', text: 'Thế giới khách quan phản ánh vào óc', answer: 'tn' },
+  { id: 'y3', text: 'Lao động có mục đích', answer: 'xh' },
+  { id: 'y4', text: 'Ngôn ngữ (tiếng nói, chữ viết)', answer: 'xh' },
+  { id: 'y5', text: 'Quan hệ xã hội', answer: 'xh' },
+  { id: 'y6', text: 'Hệ thần kinh trung ương', answer: 'tn' },
+];
+let drag2Score = 0, drag2Answered = 0;
+let currentDrag2 = null;
+
+function initDrag2() {
+  const bank = document.getElementById('drag-bank2');
+  bank.innerHTML = '';
+  ythucCards.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'drag-card';
+    el.draggable = true;
+    el.id = 'drag2-' + c.id;
+    el.textContent = c.text;
+    el.dataset.answer = c.answer;
+    el.addEventListener('dragstart', e => { currentDrag2 = el; el.classList.add('dragging'); });
+    el.addEventListener('dragend', e => el.classList.remove('dragging'));
+    bank.appendChild(el);
+  });
+  drag2Score = 0; drag2Answered = 0;
+  document.getElementById('drag-score2').textContent = '0';
+  document.getElementById('drag-total2').textContent = '0';
+  ['dz-tn','dz-xh'].forEach(id => document.getElementById(id).querySelectorAll('.drag-card').forEach(e => e.remove()));
+}
+
+function dropCard2(e, zone) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('over');
+  if (!currentDrag2 || currentDrag2.dataset.dropped) return;
+  const correct = currentDrag2.dataset.answer === zone;
+  currentDrag2.dataset.dropped = '1';
+  drag2Answered++;
+  if (correct) { drag2Score++; currentDrag2.classList.add('correct'); }
+  else { currentDrag2.classList.add('wrong'); setTimeout(() => currentDrag2.classList.remove('wrong'), 400); }
+  e.currentTarget.appendChild(currentDrag2);
+  document.getElementById('drag-score2').textContent = drag2Score;
+  document.getElementById('drag-total2').textContent = drag2Answered;
+  currentDrag2 = null;
+}
+function resetDrag2() { initDrag2(); }
+
+// Fix dragover for drag2 zones
+document.addEventListener('DOMContentLoaded', () => {
+  ['dz-tn','dz-xh'].forEach(id => {
+    const z = document.getElementById(id);
+    if (z) z.addEventListener('dragleave', () => z.classList.remove('over'));
+  });
+  ['dz-dv','dz-dt'].forEach(id => {
+    const z = document.getElementById(id);
+    if (z) z.addEventListener('dragleave', () => z.classList.remove('over'));
+  });
+  initDrag(); initDrag2(); initQuiz(); updateWater(0);
+});
+
+// ============ QUIZ ============
+const questions = [
+  {
+    text: 'Phép biện chứng duy vật cho rằng đứng im là <span class="trap">hoàn toàn không có</span> trong tự nhiên.',
+    answer: false,
+    trap: 'hoàn toàn không có',
+    explain: 'Sai! Đứng im <em>có tồn tại</em> nhưng chỉ là <em>tương đối</em> — một trạng thái đặc biệt của vận động. Vận động mới là tuyệt đối. Từ "<span class="trap-reveal">hoàn toàn không có</span>" là bẫy — quá tuyệt đối hóa.',
+  },
+  {
+    text: 'Vật chất quyết định ý thức, vì vậy ý thức <span class="trap">hoàn toàn thụ động</span> và không có tác động gì đến vật chất.',
+    answer: false,
+    trap: 'hoàn toàn thụ động',
+    explain: 'Sai! Ý thức có <em>tính độc lập tương đối</em> và <em>tác động ngược lại vật chất</em>. Đường lối đúng đắn thúc đẩy phát triển; đường lối sai lầm kìm hãm. Từ "<span class="trap-reveal">hoàn toàn thụ động</span>" là bẫy.',
+  },
+  {
+    text: 'Thực tiễn là tiêu chuẩn duy nhất và tuyệt đối để kiểm tra chân lý.',
+    answer: false,
+    trap: 'duy nhất và tuyệt đối',
+    explain: 'Sai! Thực tiễn là tiêu chuẩn của chân lý, nhưng không phải <em>tuyệt đối</em>. Thực tiễn cũng có giới hạn lịch sử, có thể thay đổi theo thời gian. Chân lý có tính tương đối.',
+  },
+  {
+    text: 'Quy luật phủ định của phủ định cho thấy cái mới phủ định <span class="trap">hoàn toàn và sạch trơn</span> cái cũ.',
+    answer: false,
+    trap: 'hoàn toàn và sạch trơn',
+    explain: 'Sai! Đây là <em>phủ định siêu hình</em>. Phủ định <em>biện chứng</em> là phủ định có kế thừa — giữ lại những yếu tố tích cực của cái cũ để tạo ra cái mới cao hơn. "<span class="trap-reveal">Sạch trơn</span>" là từ bẫy.',
+  },
+  {
+    text: 'Mâu thuẫn biện chứng giữa các mặt đối lập là nguồn gốc của mọi sự vận động và phát triển.',
+    answer: true,
+    trap: null,
+    explain: 'Đúng! Đây là nội dung cốt lõi của Quy luật Mâu thuẫn. Sự thống nhất và đấu tranh của các mặt đối lập là nguồn gốc nội tại thúc đẩy sự vật vận động và phát triển.',
+  },
+  {
+    text: 'Cái nguyên nhân <span class="trap">luôn luôn</span> xảy ra trước kết quả về mặt thời gian.',
+    answer: false,
+    trap: 'luôn luôn',
+    explain: 'Sai hoặc cần thận trọng! Nguyên nhân thường có trước kết quả, nhưng quan hệ nhân-quả có tính phức tạp: một kết quả có thể do nhiều nguyên nhân; nguyên nhân-kết quả có thể đổi vai trò. "<span class="trap-reveal">Luôn luôn</span>" là từ tuyệt đối hóa.',
+  },
+  {
+    text: 'Ý thức là sản phẩm của bộ óc người, do đó bộ óc người <span class="trap">chính là</span> ý thức.',
+    answer: false,
+    trap: 'chính là',
+    explain: 'Sai! Ý thức là <em>chức năng</em> của bộ óc, không phải bộ óc. Bộ óc là cơ sở vật chất; ý thức là sự phản ánh thế giới khách quan vào bộ óc. Đồng nhất bộ óc = ý thức là sai lầm.',
+  },
+  {
+    text: 'Phép biện chứng duy vật thừa nhận mọi sự vật đều có mối liên hệ qua lại với nhau.',
+    answer: true,
+    trap: null,
+    explain: 'Đúng! Nguyên lý về mối liên hệ phổ biến khẳng định mọi sự vật, hiện tượng đều có mối liên hệ với nhau — liên hệ là khách quan, phổ biến và đa dạng.',
+  },
+];
+
+let quizScore = 0, quizAnswered = 0;
+
+function initQuiz() {
+  const list = document.getElementById('quiz-list');
+  list.innerHTML = '';
+  quizScore = 0; quizAnswered = 0;
+  document.getElementById('q-score').textContent = '0';
+  document.getElementById('q-total').textContent = '0';
+
+  questions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-q';
+    div.innerHTML = `
+      <div class="quiz-q-num">Câu ${i + 1} / ${questions.length}</div>
+      <div class="quiz-q-text">${q.text}</div>
+      <div class="quiz-btns">
+        <button class="quiz-btn" onclick="answerQuiz(${i}, true, this)">✓ Đúng</button>
+        <button class="quiz-btn" onclick="answerQuiz(${i}, false, this)">✗ Sai</button>
+      </div>
+      <div class="quiz-explain" id="qe-${i}">${q.explain}</div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function answerQuiz(i, ans, btn) {
+  const q = questions[i];
+  const explain = document.getElementById('qe-' + i);
+  const btns = btn.parentElement.querySelectorAll('.quiz-btn');
+  if (btns[0].disabled) return;
+  btns.forEach(b => b.disabled = true);
+  quizAnswered++;
+  const correct = ans === q.answer;
+  if (correct) {
+    quizScore++;
+    btn.classList.add('correct-ans');
+  } else {
+    btn.classList.add('wrong-ans');
+    // Highlight correct
+    btns[q.answer ? 0 : 1].classList.add('correct-ans');
+  }
+  // Reveal traps
+  if (q.trap) {
+    const qText = btn.closest('.quiz-q').querySelector('.quiz-q-text');
+    qText.querySelectorAll('.trap').forEach(el => el.classList.add('revealed'));
+  }
+  explain.classList.add('show');
+  document.getElementById('q-score').textContent = quizScore;
+  document.getElementById('q-total').textContent = quizAnswered;
+}
+
+function resetQuiz() { initQuiz(); }
+</script>
+</body>
+</html>
